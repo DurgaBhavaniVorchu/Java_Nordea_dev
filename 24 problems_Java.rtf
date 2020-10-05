@@ -1,0 +1,354 @@
+{\rtf1\ansi\ansicpg1252\deff0\nouicompat\deflang1033{\fonttbl{\f0\fnil\fcharset0 Calibri;}{\f1\fnil Consolas;}{\f2\fnil\fcharset0 Consolas;}}
+{\colortbl ;\red127\green0\blue85;\red0\green0\blue0;\red0\green0\blue192;\red106\green62\blue62;\red42\green0\blue255;\red0\green0\blue255;\red63\green127\blue95;}
+{\*\generator Riched20 10.0.18362}\viewkind4\uc1 
+\pard\sa200\sl276\slmult1\f0\fs22\lang9 1. Threads: Write a Java program which will result in deadlock situation and modify the same to avoid deadlock?\par
+Solution1(Deadlock sitution): \par
+\cf1\b\f1\fs20 class\cf2\b0  MyThread \cf1\b extends\cf2\b0  Thread \{\cf0\par
+\cf2\tab\cf1\b static\cf2\b0  Thread \cf3\i mt\cf2\i0 ;\cf0\par
+\cf2\tab\cf1\b public\cf2\b0  \cf1\b void\cf2\b0  run() \{\cf0\par
+\cf2\tab\tab\cf1\b try\cf2\b0  \{\cf0\par
+\cf2\tab\tab\tab\cf3\i mt\cf2\i0 .join();\cf0\par
+\cf2\tab\tab\}\cf1\b catch\cf2\b0 (InterruptedException \cf4 ie\cf2 )\{\}\cf0\par
+\cf2\tab\tab\cf1\b for\cf2\b0 (\cf1\b int\cf2\b0  \cf4 i\cf2  =0;\cf4 i\cf2 <10;\cf4 i\cf2 ++) \{\cf0\par
+\cf2\tab\tab\tab System.\cf3\b\i out\cf2\b0\i0 .println(\cf5 "child thread"\cf2 );\cf0\par
+\cf2\tab\tab\}\cf0\par
+\cf2\tab\}\cf0\par
+\cf2\}\cf0\par
+\cf1\b public\cf2\b0  \cf1\b class\cf2\b0  DeadLockSituation\{\cf0\par
+\cf2\tab\cf1\b public\cf2\b0  \cf1\b static\cf2\b0  \cf1\b void\cf2\b0  main(String[] \cf4 args\cf2 ) \cf1\b throws\cf2\b0  InterruptedException \{\cf0\par
+\cf2\tab\tab MyThread.\cf3\i mt\cf2\i0 =Thread.\i currentThread\i0 ();\cf0\par
+\cf2\tab\tab MyThread \cf4 t\cf2  = \cf1\b new\cf2\b0  MyThread();\cf0\par
+\cf2\tab\tab\cf4 t\cf2 .start();\cf0\par
+\cf2\tab\tab\cf4 t\cf2 .join();\cf0\par
+\cf2\tab\tab\cf1\b for\cf2\b0 (\cf1\b int\cf2\b0  \cf4 i\cf2 =0;\cf4 i\cf2 <3;\cf4 i\cf2 ++) \{\cf0\par
+\cf2\tab\tab\tab System.\cf3\b\i out\cf2\b0\i0 .println(\cf5 "main thread"\cf2 );\cf0\par
+\cf2\tab\tab\}\cf0\par
+\cf2\tab\}\tab\cf0\par
+\cf2\}\par
+\cf0\f0\fs22 Solution2(Deadlock sitution): \par
+\cf1\b\f1\fs20 class\cf2\b0  D1\{\tab\cf0\par
+\cf2\tab\cf1\b public\cf2\b0  \cf1\b synchronized\cf2\b0  \cf1\b void\cf2\b0  m1(D2 \cf4 d2\cf2 ) \{\cf0\par
+\cf2\tab\tab System.\cf3\b\i out\cf2\b0\i0 .println(\cf5 "Thread 1 to starts execution m1()"\cf2 );\cf0\par
+\cf2\tab\tab\cf1\b try\cf2\b0  \{\cf0\par
+\cf2\tab\tab\tab Thread.\i sleep\i0 (2000);\cf0\par
+\cf2\tab\tab\}\cf1\b catch\cf2\b0 (InterruptedException \cf4 ie\cf2 ) \{\}\cf0\par
+\cf2\tab\tab System.\cf3\b\i out\cf2\b0\i0 .println(\cf5 "Thread 1 trying to call d2's last2() method"\cf2 );\cf0\par
+\cf2\tab\tab\cf4 d2\cf2 .last2();\cf0\par
+\cf2\tab\}\cf0\par
+\cf2\tab\cf1\b public\cf2\b0  \cf1\b synchronized\cf2\b0  \cf1\b void\cf2\b0  last1() \{\cf0\par
+\cf2\tab\tab\cf0\par
+\cf2\tab\tab System.\cf3\b\i out\cf2\b0\i0 .println(\cf5 "last1 d1"\cf2 );\cf0\par
+\cf2\tab\}\cf0\par
+\cf2\}\cf0\par
+\cf1\b class\cf2\b0  D2\{\cf0\par
+\cf2\tab\cf1\b public\cf2\b0  \cf1\b synchronized\cf2\b0  \cf1\b void\cf2\b0  m2(D1 \cf4 d1\cf2 ) \{\cf0\par
+\cf2\tab\tab System.\cf3\b\i out\cf2\b0\i0 .println(\cf5 "Thread 1 to starts execution m1()"\cf2 );\cf0\par
+\cf2\tab\tab\cf1\b try\cf2\b0  \{\cf0\par
+\cf2\tab\tab\tab Thread.\i sleep\i0 (2000);\cf0\par
+\cf2\tab\tab\}\cf1\b catch\cf2\b0 (InterruptedException \cf4 ie\cf2 ) \{\}\cf0\par
+\cf2\tab\tab System.\cf3\b\i out\cf2\b0\i0 .println(\cf5 "Thread 1 trying to call d2's last2() method"\cf2 );\cf0\par
+\cf2\tab\tab\cf4 d1\cf2 .last1();\cf0\par
+\cf2\tab\}\cf0\par
+\cf2\tab\cf1\b public\cf2\b0  \cf1\b synchronized\cf2\b0  \cf1\b void\cf2\b0  last2() \{\cf0\par
+\cf2\tab\tab System.\cf3\b\i out\cf2\b0\i0 .println(\cf5 "last2 d2"\cf2 );\cf0\par
+\cf2\tab\}\cf0\par
+\cf2\}\cf0\par
+\cf1\b public\cf2\b0  \cf1\b class\cf2\b0  DeadLockSituation2 \cf1\b extends\cf2\b0  Thread\{\cf0\par
+\cf2\tab D1 \cf3 d1\cf2  = \cf1\b new\cf2\b0  D1();\cf0\par
+\cf2\tab D2 \cf3 d2\cf2  = \cf1\b new\cf2\b0  D2();\cf0\par
+\cf2\tab\cf1\b public\cf2\b0  \cf1\b void\cf2\b0  main() \{\cf0\par
+\cf2\tab\tab\cf1\b this\cf2\b0 .start();\cf0\par
+\cf2\tab\tab\cf3 d1\cf2 .m1(\cf3 d2\cf2 );\cf0\par
+\cf2\tab\}\cf0\par
+\cf2\tab\cf1\b public\cf2\b0  \cf1\b void\cf2\b0  run() \{\cf0\par
+\cf2\tab\tab\cf3 d2\cf2 .m2(\cf3 d1\cf2 );\cf0\par
+\cf2\tab\}\cf0\par
+\cf2\tab\cf0\par
+\cf2\tab\cf1\b public\cf2\b0  \cf1\b static\cf2\b0  \cf1\b void\cf2\b0  main(String[] \cf4 args\cf2 ) \{\cf0\par
+\cf2\tab\tab DeadLockSituation2 \cf4 t\cf2  = \cf1\b new\cf2\b0  DeadLockSituation2();\cf0\par
+\cf2\tab\tab\cf4 t\cf2 .main();\cf0\par
+\cf2\tab\}\cf0\par
+\cf2\}\cf0\par
+\f0\fs22 solution(to avoid dead lock):\par
+\cf1\b\f1\fs20 class\cf2\b0  D1\{\tab\cf0\par
+\cf2\tab\cf1\b public\cf2\b0  \cf1\b void\cf2\b0  m1(D2 \cf4 d2\cf2 ) \{\cf0\par
+\cf2\tab\tab System.\cf3\b\i out\cf2\b0\i0 .println(\cf5 "Thread 1 to starts execution m1()"\cf2 );\cf0\par
+\cf2\tab\tab\cf1\b try\cf2\b0  \{\cf0\par
+\cf2\tab\tab\tab Thread.\i sleep\i0 (2000);\cf0\par
+\cf2\tab\tab\}\cf1\b catch\cf2\b0 (InterruptedException \cf4 ie\cf2 ) \{\}\cf0\par
+\cf2\tab\tab System.\cf3\b\i out\cf2\b0\i0 .println(\cf5 "Thread 1 trying to call d2's last2() method"\cf2 );\cf0\par
+\cf2\tab\tab\cf4 d2\cf2 .last2();\cf0\par
+\cf2\tab\}\cf0\par
+\cf2\tab\cf1\b public\cf2\b0  \cf1\b synchronized\cf2\b0  \cf1\b void\cf2\b0  last1() \{\cf0\par
+\cf2\tab\tab\cf0\par
+\cf2\tab\tab System.\cf3\b\i out\cf2\b0\i0 .println(\cf5 "last1 d1"\cf2 );\cf0\par
+\cf2\tab\}\cf0\par
+\cf2\}\cf0\par
+\cf1\b class\cf2\b0  D2\{\cf0\par
+\cf2\tab\cf1\b public\cf2\b0  \cf1\b synchronized\cf2\b0  \cf1\b void\cf2\b0  m2(D1 \cf4 d1\cf2 ) \{\cf0\par
+\cf2\tab\tab System.\cf3\b\i out\cf2\b0\i0 .println(\cf5 "Thread 1 to starts execution m1()"\cf2 );\cf0\par
+\cf2\tab\tab\cf1\b try\cf2\b0  \{\cf0\par
+\cf2\tab\tab\tab Thread.\i sleep\i0 (2000);\cf0\par
+\cf2\tab\tab\}\cf1\b catch\cf2\b0 (InterruptedException \cf4 ie\cf2 ) \{\}\cf0\par
+\cf2\tab\tab System.\cf3\b\i out\cf2\b0\i0 .println(\cf5 "Thread 1 trying to call d2's last2() method"\cf2 );\cf0\par
+\cf2\tab\tab\cf4 d1\cf2 .last1();\cf0\par
+\cf2\tab\}\cf0\par
+\cf2\tab\cf1\b public\cf2\b0  \cf1\b synchronized\cf2\b0  \cf1\b void\cf2\b0  last2() \{\cf0\par
+\cf2\tab\tab System.\cf3\b\i out\cf2\b0\i0 .println(\cf5 "last2 d2"\cf2 );\cf0\par
+\cf2\tab\}\cf0\par
+\cf2\}\cf0\par
+\cf1\b public\cf2\b0  \cf1\b class\cf2\b0  DeadLockSituation2 \cf1\b extends\cf2\b0  Thread\{\cf0\par
+\cf2\tab D1 \cf3 d1\cf2  = \cf1\b new\cf2\b0  D1();\cf0\par
+\cf2\tab D2 \cf3 d2\cf2  = \cf1\b new\cf2\b0  D2();\cf0\par
+\cf2\tab\cf1\b public\cf2\b0  \cf1\b void\cf2\b0  main() \{\cf0\par
+\cf2\tab\tab\cf1\b this\cf2\b0 .start();\cf0\par
+\cf2\tab\tab\cf3 d1\cf2 .m1(\cf3 d2\cf2 );\cf0\par
+\cf2\tab\}\cf0\par
+\cf2\tab\cf1\b public\cf2\b0  \cf1\b void\cf2\b0  run() \{\cf0\par
+\cf2\tab\tab\cf3 d2\cf2 .m2(\cf3 d1\cf2 );\cf0\par
+\cf2\tab\}\cf0\par
+\cf2\tab\cf1\b public\cf2\b0  \cf1\b static\cf2\b0  \cf1\b void\cf2\b0  main(String[] \cf4 args\cf2 ) \{\cf0\par
+\cf2\tab\tab DeadLockSituation2 \cf4 t\cf2  = \cf1\b new\cf2\b0  DeadLockSituation2();\cf0\par
+\cf2\tab\tab\cf4 t\cf2 .main();\cf0\par
+\cf2\tab\}\cf0\par
+\cf2\}\cf0\par
+\f0\fs22\par
+\par
+2. FizzBuzz problem: Write a Java program that prints the numbers from 1 to 50. But for multiples of three print "Fizz" instead of the number and for the multiples of five print "Buzz". For numbers which are multiples of both three and five print "FizzBuzz" Solution: Refer ({{\field{\*\fldinst{HYPERLINK https://www.java67.com/2012/08/10-java-coding-interview-questions-and.html }}{\fldrslt{https://www.java67.com/2012/08/10-java-coding-interview-questions-and.html\ul0\cf0}}}}\f0\fs22 )\par
+Solution:\f1\fs20\par
+\cf1\b public\cf2\b0  \cf1\b class\cf2\b0  FizzBuzz \{\cf0\par
+\cf2\tab\cf1\b public\cf2\b0  \cf1\b static\cf2\b0  \cf1\b void\cf2\b0  main(String[] \cf4 args\cf2 ) \{\cf0\par
+\cf2\tab\tab\cf1\b for\cf2\b0 (\cf1\b int\cf2\b0  \cf4 i\cf2 =1;\cf4 i\cf2 <=50;\cf4 i\cf2 ++) \{\cf0\par
+\cf2\tab\tab\tab\cf1\b if\cf2\b0 (\cf4 i\cf2 %3==0 && \cf4 i\cf2 %5==0) \{\cf0\par
+\cf2\tab\tab\tab\tab System.\cf3\b\i out\cf2\b0\i0 .println(\cf5 "FizzBuzz"\cf2 );\cf0\par
+\cf2\tab\tab\tab\}\cf0\par
+\cf2\tab\tab\tab\cf1\b else\cf2\b0  \cf1\b if\cf2\b0 (\cf4 i\cf2 %5==0) \{\cf0\par
+\cf2\tab\tab\tab\tab System.\cf3\b\i out\cf2\b0\i0 .println(\cf5 "Buzz"\cf2 );\cf0\par
+\cf2\tab\tab\tab\}\cf0\par
+\cf2\tab\tab\tab\cf1\b else\cf2\b0  \cf1\b if\cf2\b0 (\cf4 i\cf2 %3==0) \{\cf0\par
+\cf2\tab\tab\tab\tab System.\cf3\b\i out\cf2\b0\i0 .println(\cf5 "Fizz"\cf2 );\cf0\par
+\cf2\tab\tab\tab\}\cf0\par
+\cf2\tab\tab\tab\cf1\b else\cf2\b0  \{\cf0\par
+\cf2\tab\tab\tab\tab System.\cf3\b\i out\cf2\b0\i0 .println(\cf4 i\cf2 );\cf0\par
+\cf2\tab\tab\tab\}\cf0\par
+\cf2\tab\tab\}\cf0\par
+\cf2\tab\}\cf0\par
+\cf2\}\par
+3. Anagram problem: Write a java program to check whether two given strings are anagram or not. Two strings are said to be anagram if they contain same set of characters but in different order.\par
+\f2\lang16393 Solution: \par
+\tab\cf1\b\f1 package\cf2\b0  com.cg.anagram;\cf0\par
+\cf1\b import\cf2\b0  java.util.Arrays;\cf0\par
+\cf1\b public\cf2\b0  \cf1\b class\cf2\b0  Anagram \{\cf0\par
+\cf2\tab\cf1\b public\cf2\b0  \cf1\b static\cf2\b0  \cf1\b void\cf2\b0  main(String[] \cf4 args\cf2 ) \{\cf0\par
+\cf2\tab\tab String \cf4 str1\cf2 =\cf5 "Anagram maa"\cf2 ;\cf0\par
+\cf2\tab\tab String \cf4 str2\cf2 =\cf5 "Gramana ama"\cf2 ;\cf0\par
+\cf2\tab\tab String \cf4 remSpa1\cf2 =\cf4 str1\cf2 .replaceAll(\cf5 "\\s"\cf2 , \cf5 ""\cf2 );\cf0\par
+\cf2\tab\tab String \cf4 remSpa2\cf2 =\cf4 str2\cf2 .replaceAll(\cf5 "\\s"\cf2 , \cf5 ""\cf2 );\cf0\par
+\cf2\tab\tab\cf1\b char\cf2\b0 [] \cf4 ch1\cf2 =\cf4 remSpa1\cf2 .toLowerCase().toCharArray();\cf0\par
+\cf2\tab\tab\cf1\b char\cf2\b0 [] \cf4 ch2\cf2 =\cf4 remSpa2\cf2 .toLowerCase().toCharArray();\cf0\par
+\cf2\tab\tab Arrays.\i sort\i0 (\cf4 ch1\cf2 );\cf0\par
+\cf2\tab\tab Arrays.\i sort\i0 (\cf4 ch2\cf2 );\cf0\par
+\cf2\tab\tab\cf1\b if\cf2\b0 (\cf4 ch1\cf2 .\cf3 length\cf2  == \cf4 ch2\cf2 .\cf3 length\cf2 ) \{\cf0\par
+\cf2\tab\tab\tab\cf1\b if\cf2\b0 (Arrays.\i equals\i0 (\cf4 ch1\cf2 , \cf4 ch2\cf2 )) \{\cf0\par
+\cf2\tab\tab\tab\tab System.\cf3\b\i out\cf2\b0\i0 .println(\cf5 "String 1 & String 2 are anagram"\cf2 );\cf0\par
+\cf2\tab\tab\tab\}\cf0\par
+\cf2\tab\tab\tab\cf1\b else\cf2\b0  \{\cf0\par
+\cf2\tab\tab\tab\tab System.\cf3\b\i out\cf2\b0\i0 .println(\cf5 "String1 & String2 are not an anagram"\cf2 );\tab\cf0\par
+\cf2\tab\tab\tab\}\cf0\par
+\cf2\tab\tab\}\cf0\par
+\cf2\tab\tab\cf1\b else\cf2\b0  \{\cf0\par
+\cf2\tab\tab\tab System.\cf3\b\i out\cf2\b0\i0 .println(\cf5 "String1 & String2 are not an anagram"\cf2 );\cf0\par
+\cf2\tab\tab\}\cf0\par
+\cf2\tab\}\cf0\par
+\cf2\}\cf0\par
+\cf2\f2 4. OOPS: Design a system of classes for Smart Phone and derived classes like IOS Phone, Android Phone and BlackBerry Phone.\par
+Solution: \par
+\cf1\b\f1 package\cf2\b0  com.cg.Mobile;\cf0\par
+\cf1\b class\cf2\b0  Details\{\cf0\par
+\cf2\tab String \cf3 model\cf2 ;\cf0\par
+\cf2\tab String \cf3 manufacturer\cf2 ;\cf0\par
+\cf2\tab\cf1\b int\cf2\b0  \cf3 cost\cf2 ;\cf0\par
+\cf2\tab String \cf3 operatingSystem\cf2 ;\cf0\par
+\cf2\tab\cf1\b public\cf2\b0  Details() \{\cf0\par
+\cf2\tab\tab\cf1\b super\cf2\b0 ();\cf0\par
+\cf2\tab\}\cf0\par
+\cf2\tab\cf1\b public\cf2\b0  Details(String \cf4 model\cf2 , String \cf4 manufacturer\cf2 , \cf1\b int\cf2\b0  \cf4 cost\cf2 , String \cf4 operatingSystem\cf2 ) \{\cf0\par
+\cf2\tab\tab\cf1\b this\cf2\b0 .\cf3 model\cf2  = \cf4 model\cf2 ;\cf0\par
+\cf2\tab\tab\cf1\b this\cf2\b0 .\cf3 manufacturer\cf2  = \cf4 manufacturer\cf2 ;\cf0\par
+\cf2\tab\tab\cf1\b this\cf2\b0 .\cf3 cost\cf2  = \cf4 cost\cf2 ;\cf0\par
+\cf2\tab\tab\cf1\b this\cf2\b0 .\cf3 operatingSystem\cf2  = \cf4 operatingSystem\cf2 ;\cf0\par
+\cf2\tab\}\cf0\par
+\cf2\tab\cf1\b public\cf2\b0  String getModel() \{\cf0\par
+\cf2\tab\tab\cf1\b return\cf2\b0  \cf3 model\cf2 ;\cf0\par
+\cf2\tab\}\cf0\par
+\cf2\tab\cf1\b public\cf2\b0  \cf1\b void\cf2\b0  setModel(String \cf4 model\cf2 ) \{\cf0\par
+\cf2\tab\tab\cf1\b this\cf2\b0 .\cf3 model\cf2  = \cf4 model\cf2 ;\cf0\par
+\cf2\tab\}\cf0\par
+\cf2\tab\cf1\b public\cf2\b0  String getManufacturer() \{\cf0\par
+\cf2\tab\tab\cf1\b return\cf2\b0  \cf3 manufacturer\cf2 ;\cf0\par
+\cf2\tab\}\cf0\par
+\cf2\tab\cf1\b public\cf2\b0  \cf1\b void\cf2\b0  setManufacturer(String \cf4 manufacturer\cf2 ) \{\cf0\par
+\cf2\tab\tab\cf1\b this\cf2\b0 .\cf3 manufacturer\cf2  = \cf4 manufacturer\cf2 ;\cf0\par
+\cf2\tab\}\cf0\par
+\cf2\tab\cf1\b public\cf2\b0  \cf1\b int\cf2\b0  getCost() \{\cf0\par
+\cf2\tab\tab\cf1\b return\cf2\b0  \cf3 cost\cf2 ;\cf0\par
+\cf2\tab\}\cf0\par
+\cf2\tab\cf1\b public\cf2\b0  \cf1\b void\cf2\b0  setCost(\cf1\b int\cf2\b0  \cf4 cost\cf2 ) \{\cf0\par
+\cf2\tab\tab\cf1\b this\cf2\b0 .\cf3 cost\cf2  = \cf4 cost\cf2 ;\cf0\par
+\cf2\tab\}\cf0\par
+\cf2\tab\cf1\b public\cf2\b0  String getOperatingSystem() \{\cf0\par
+\cf2\tab\tab\cf1\b return\cf2\b0  \cf3 operatingSystem\cf2 ;\cf0\par
+\cf2\tab\}\cf0\par
+\cf2\tab\cf1\b public\cf2\b0  \cf1\b void\cf2\b0  setOperatingSystem(String \cf4 operatingSystem\cf2 ) \{\cf0\par
+\cf2\tab\tab\cf1\b this\cf2\b0 .\cf3 operatingSystem\cf2  = \cf4 operatingSystem\cf2 ;\cf0\par
+\cf2\tab\}\tab\cf0\par
+\cf2\}\cf0\par
+\cf1\b class\cf2\b0  IOS \cf1\b extends\cf2\b0  Details\{\cf0\par
+\cf2\tab\cf1\b public\cf2\b0  IOS(String \cf4 mo\cf2 , String \cf4 mf\cf2 , \cf1\b int\cf2\b0  \cf4 cost\cf2 , String \cf4 os\cf2 ) \{\cf0\par
+\cf2\tab\tab\cf1\b super\cf2\b0 (\cf4 mo\cf2 , \cf4 mf\cf2 , \cf4 cost\cf2 , \cf4 os\cf2 );\cf0\par
+\cf2\tab\}\cf0\par
+\cf2\tab\cf1\b public\cf2\b0  String getModel() \{\cf0\par
+\cf2\tab\tab\cf1\b return\cf2\b0  \cf5 "This is a IOS model"\cf2 +\cf5 ": "\cf2 + \cf3 model\cf2 ;\cf0\par
+\cf2\tab\}\cf0\par
+\cf2\}\cf0\par
+\cf1\b class\cf2\b0  Andriod \cf1\b extends\cf2\b0  Details\{\tab\cf0\par
+\cf2\tab\cf1\b public\cf2\b0  Andriod(String \cf4 mo\cf2 , String \cf4 mf\cf2 , \cf1\b int\cf2\b0  \cf4 cost\cf2 , String \cf4 os\cf2 ) \{\cf0\par
+\cf2\tab\tab\cf1\b super\cf2\b0 (\cf4 mo\cf2 , \cf4 mf\cf2 , \cf4 cost\cf2 , \cf4 os\cf2 );\cf0\par
+\cf2\tab\}\cf0\par
+\cf2\tab\cf1\b public\cf2\b0  String getModel() \{\cf0\par
+\cf2\tab\tab\cf1\b return\cf2\b0  \cf5 "This is a Andriod model"\cf2 +\cf5 ": "\cf2 + \cf3 model\cf2 ;\cf0\par
+\cf2\tab\}\cf0\par
+\cf2\}\cf0\par
+\cf1\b class\cf2\b0  BlackBerry \cf1\b extends\cf2\b0  Details\{\tab\cf0\par
+\cf2\tab\cf1\b public\cf2\b0  BlackBerry(String \cf4 mo\cf2 , String \cf4 mf\cf2 , \cf1\b int\cf2\b0  \cf4 cost\cf2 , String \cf4 os\cf2 ) \{\cf0\par
+\cf2\tab\tab\cf1\b super\cf2\b0 (\cf4 mo\cf2 , \cf4 mf\cf2 , \cf4 cost\cf2 , \cf4 os\cf2 );\cf0\par
+\cf2\tab\}\cf0\par
+\cf2\tab\cf1\b public\cf2\b0  String getModel() \{\cf0\par
+\cf2\tab\tab\cf1\b return\cf2\b0  \cf5 "This is a BlackBerry model"\cf2 +\cf5 ": "\cf2 + \cf3 model\cf2 ;\cf0\par
+\cf2\tab\}\cf0\par
+\cf2\}\cf0\par
+\cf1\b public\cf2\b0  \cf1\b class\cf2\b0  Mobile \{\cf0\par
+\cf2\tab\cf1\b public\cf2\b0  \cf1\b static\cf2\b0  \cf1\b void\cf2\b0  main(String[] \cf4 args\cf2 ) \{\cf0\par
+\cf2\tab\tab IOS \cf4 ios\cf2  = \cf1\b new\cf2\b0  IOS(\cf5 "ios.14.0.1"\cf2 , \cf5 "apple company"\cf2 , 100000, \cf5 "IOS"\cf2 );\cf0\par
+\cf2\tab\tab Andriod \cf4 andriod\cf2  = \cf1\b new\cf2\b0  Andriod(\cf5 "J5"\cf2 , \cf5 "Samsung"\cf2 , 12000, \cf5 "andriod"\cf2 );\cf0\par
+\cf2\tab\tab BlackBerry \cf4 blackBerry\cf2  = \cf1\b new\cf2\b0  BlackBerry(\cf5 "Curve"\cf2 , \cf5 "BalckBerry"\cf2 , 12000, \cf5 "RIM"\cf2 );\tab\cf0\par
+\cf2\tab\tab System.\cf3\b\i out\cf2\b0\i0 .println(\cf4 ios\cf2 .getModel());\cf0\par
+\cf2\tab\tab System.\cf3\b\i out\cf2\b0\i0 .println(\cf4 andriod\cf2 .getModel());\cf0\par
+\cf2\tab\tab System.\cf3\b\i out\cf2\b0\i0 .println(\cf4 blackBerry\cf2 .getModel());\cf0\par
+\cf2\tab\}\cf0\par
+\cf2\}\cf0\par
+\cf2\f2 5. Arrays: Write a program to separate zeros from non-zeros in an array without creating new array.\par
+Solution: \par
+\cf1\b\f1 package\cf2\b0  com.cg.SaperateZeros;\cf0\par
+\cf1\b public\cf2\b0  \cf1\b class\cf2\b0  SaperateZeros \{\cf0\par
+\cf2\tab\cf1\b public\cf2\b0  \cf1\b static\cf2\b0  \cf1\b void\cf2\b0  main(String[] \cf4 args\cf2 ) \{\cf0\par
+\cf2\tab\tab\cf1\b int\cf2\b0 [] \cf4 num\cf2  = \{1, 0, 9, 0, 8, 3, 0, 7, 0\};\cf0\par
+\cf2\tab\tab\cf1\b int\cf2\b0  \cf4 zeros\cf2  = \cf4 num\cf2 .\cf3 length\cf2 ;\cf0\par
+\cf2\tab\tab\cf7 //printing zeros back of an array\cf0\par
+\cf2\tab\tab\cf1\b int\cf2\b0  \cf4 flag\cf2 =0;\cf0\par
+\cf2\tab\tab\cf1\b for\cf2\b0 (\cf1\b int\cf2\b0  \cf4 i\cf2 =0;\cf4 i\cf2 <\cf4 zeros\cf2 ;\cf4 i\cf2 ++) \{\cf0\par
+\cf2\tab\tab\tab\cf1\b if\cf2\b0 (\cf4 num\cf2 [\cf4 i\cf2 ] !=0) \{\cf0\par
+\cf2\tab\tab\tab\tab\cf4 num\cf2 [\cf4 flag\cf2 ] = \cf4 num\cf2 [\cf4 i\cf2 ];\cf0\par
+\cf2\tab\tab\tab\tab\cf4 flag\cf2 ++;\cf0\par
+\cf2\tab\tab\tab\}\cf0\par
+\cf2\tab\tab\}\cf0\par
+\cf2\tab\tab\cf1\b while\cf2\b0 (\cf4 flag\cf2 <\cf4 zeros\cf2 ) \{\cf0\par
+\cf2\tab\tab\tab\cf4 num\cf2 [\cf4 flag\cf2 ]=0;\cf0\par
+\cf2\tab\tab\tab\cf4 flag\cf2 ++;\cf0\par
+\cf2\tab\tab\}\cf0\par
+\cf2\tab\tab\cf1\b for\cf2\b0 (\cf1\b int\cf2\b0  \cf4 i\cf2 =0 ;\cf4 i\cf2 <\cf4 zeros\cf2 ;\cf4 i\cf2 ++) \{\cf0\par
+\cf2\tab\tab\tab System.\cf3\b\i out\cf2\b0\i0 .print(\cf4 num\cf2 [\cf4 i\cf2 ]);\}\cf0\par
+\cf2\tab\tab\cf7 //printing zeros front of an array\cf0\par
+\cf7 //\tab\tab\ul int\ulnone  flag=num.length-1;\cf0\par
+\cf7 //\tab\tab for(\ul int\ulnone  i=zeros-1;i>=0;i--) \{\cf0\par
+\cf7 //\tab\tab\tab if(\ul num\ulnone [i] !=0) \{\cf0\par
+\cf7 //\tab\tab\tab\tab\ul num\ulnone [flag] = \ul num\ulnone [i];\cf0\par
+\cf7 //\tab\tab\tab\tab flag--;\cf0\par
+\cf7 //\tab\tab\tab\}\cf0\par
+\cf7 //\tab\tab\}\cf0\par
+\cf7 //\tab\tab while(flag>=0) \{\cf0\par
+\cf7 //\tab\tab\tab\ul num\ulnone [flag]=0;\cf0\par
+\cf7 //\tab\tab\tab flag--;\cf0\par
+\cf7 //\tab\tab\}\cf0\par
+\cf7 //\tab\tab for(\ul int\ulnone  i=0 ;i<zeros;i++) \{\cf0\par
+\cf7 //\tab\tab\tab System.out.print(\ul num\ulnone [i]);\}\cf0\par
+\cf2\tab\}\cf0\par
+\cf2\}\cf0\par
+\cf2 6. Arrays: Implement binary search in Java using divide and conquer method.\par
+\f2 Solution:\par
+\f1\tab\cf1\b package\cf2\b0  com.cg.BinarySearch;\cf0\par
+\cf1\b class\cf2\b0  Search\{\cf0\par
+\cf2\tab\cf1\b public\cf2\b0  \cf1\b int\cf2\b0  binarySearch(\cf1\b int\cf2\b0 [] \cf4 arr\cf2 , \cf1\b int\cf2\b0  \cf4 key\cf2 ) \{\cf0\par
+\cf2\tab\tab\cf1\b int\cf2\b0  \cf4 first\cf2  = 0;\cf0\par
+\cf2\tab\tab\cf1\b int\cf2\b0  \cf4 last\cf2  = \cf4 arr\cf2 .\cf3 length\cf2 -1;\cf0\par
+\cf2\tab\tab\cf1\b int\cf2\b0  \cf4 flag\cf2 =0;\cf0\par
+\cf2\tab\tab\cf1\b while\cf2\b0 (\cf4 first\cf2 <=\cf4 last\cf2 ) \{\cf0\par
+\cf2\tab\tab\tab\cf1\b int\cf2\b0  \cf4 mid\cf2  = (\cf4 first\cf2 +\cf4 last\cf2 )/2;\cf0\par
+\cf2\tab\tab\tab\cf1\b if\cf2\b0 (\cf4 key\cf2 <\cf4 arr\cf2 [\cf4 mid\cf2 ]) \{\cf0\par
+\cf2\tab\tab\tab\tab\cf4 last\cf2 =\cf4 mid\cf2 -1;\cf0\par
+\cf2\tab\tab\tab\}\cf0\par
+\cf2\tab\tab\tab\cf1\b else\cf2\b0  \cf1\b if\cf2\b0 (\cf4 key\cf2 >\cf4 arr\cf2 [\cf4 mid\cf2 ]) \{\cf0\par
+\cf2\tab\tab\tab\tab\cf4 first\cf2  = \cf4 mid\cf2 +1;\cf0\par
+\cf2\tab\tab\tab\}\cf0\par
+\cf2\tab\tab\tab\cf1\b else\cf2\b0  \cf1\b if\cf2\b0 (\cf4 key\cf2 ==\cf4 arr\cf2 [\cf4 mid\cf2 ]) \{\cf0\par
+\cf2\tab\tab\tab\tab\cf1\b return\cf2\b0  \cf4 flag\cf2 =\cf4 mid\cf2 ;\cf0\par
+\cf2\tab\tab\tab\}\cf0\par
+\cf2\tab\tab\}\cf0\par
+\cf2\tab\tab\cf1\b return\cf2\b0  \cf4 flag\cf2 ;\cf0\par
+\cf2\tab\}\cf0\par
+\cf2\}\cf0\par
+\cf1\b public\cf2\b0  \cf1\b class\cf2\b0  BinarySearch \{\cf0\par
+\cf2\tab\cf1\b public\cf2\b0  \cf1\b static\cf2\b0  \cf1\b void\cf2\b0  main(String[] \cf4 args\cf2 ) \{\cf0\par
+\cf2\tab\tab\cf1\b int\cf2\b0 [] \cf4 arr\cf2  = \{1, 2, 3, 4 , 6, 34, 56\};\cf0\par
+\cf2\tab\tab\cf1\b int\cf2\b0  \cf4 searchElement\cf2  = 33;\cf0\par
+\cf2\tab\tab Search \cf4 bs\cf2  = \cf1\b new\cf2\b0  Search();\cf0\par
+\cf2\tab\tab\cf1\b int\cf2\b0  \cf4 result\cf2  = \cf4 bs\cf2 .binarySearch(\cf4 arr\cf2 , \cf4 searchElement\cf2 );\cf0\par
+\cf2\tab\tab\cf1\b if\cf2\b0 (\cf4 result\cf2 ==0) \{\cf0\par
+\cf2\tab\tab\tab System.\cf3\b\i out\cf2\b0\i0 .println(\cf5 "searched element is not present in an array"\cf2 );\cf0\par
+\cf2\tab\tab\}\cf0\par
+\cf2\tab\tab\cf1\b else\cf2\b0  \{\cf0\par
+\cf2\tab\tab\tab System.\cf3\b\i out\cf2\b0\i0 .println(\cf5 "index of element"\cf2 +\cf4 searchElement\cf2 +\cf5 " is "\cf2 +\cf4 result\cf2  );\cf0\par
+\cf2\tab\tab\}\cf0\par
+\cf2\tab\}\cf0\par
+\cf2\}\cf0\par
+7. Strings: Write a program to check if String has all unique characters in Java?\par
+\f2 Solution:\par
+\cf1\b\f1 package\cf2\b0  com.cg.uniqueCharacters;\cf0\par
+\cf1\b import\cf2\b0  java.util.HashSet;\cf0\par
+\cf1\b class\cf2\b0  SearchDuplicates\{\cf0\par
+\cf2\tab\cf1\b public\cf2\b0  \cf1\b boolean\cf2\b0  searchDup(\cf1\b char\cf2\b0 [] \cf4 ch\cf2 ) \{\cf0\par
+\cf2\tab\tab Boolean \cf4 flag\cf2 =\cf1\b true\cf2\b0 ;\cf0\par
+\cf2\tab\tab\ul HashSet\ulnone  \cf4 hs\cf2  = \cf1\b new\cf2\b0  HashSet<>();\cf0\par
+\cf2\tab\tab\cf1\b for\cf2\b0 (\cf1\b char\cf2\b0  \cf4 c\cf2 : \cf4 ch\cf2 ) \{\cf0\par
+\cf2\tab\tab\tab\cf1\b if\cf2\b0 (\cf4 hs\cf2 .contains(\cf4 c\cf2 )) \{\cf0\par
+\cf2\tab\tab\tab\tab\cf4 flag\cf2 =\cf1\b false\cf2\b0 ;\cf0\par
+\cf7 //\tab\tab\tab\tab System.out.println(c);\cf0\par
+\cf2\tab\tab\tab\}\cf0\par
+\cf2\tab\tab\tab\cf4\ul hs\cf2 .add(\cf4 c\cf2 )\ulnone ;\tab\cf0\par
+\cf2\tab\tab\}\cf0\par
+\cf2\tab\tab\cf1\b return\cf2\b0  \cf4 flag\cf2 ;\cf0\par
+\cf2\tab\}\cf0\par
+\cf2\}\cf0\par
+\cf1\b public\cf2\b0  \cf1\b class\cf2\b0  UniqueCharacters \{\cf0\par
+\cf2\tab\cf1\b public\cf2\b0  \cf1\b static\cf2\b0  \cf1\b void\cf2\b0  main(String[] \cf4 args\cf2 ) \{\cf0\par
+\cf2\tab\tab\cf0\par
+\cf2\tab\tab String \cf4 str1\cf2  = \cf5 "Apple"\cf2 ;\cf0\par
+\cf2\tab\tab String \cf4 str2\cf2  = \cf5 "index"\cf2 ;\cf0\par
+\cf2\tab\tab\cf0\par
+\cf2\tab\tab\cf1\b char\cf2\b0 [] \cf4 ch1\cf2  = \cf4 str1\cf2 .toLowerCase().toCharArray();\cf0\par
+\cf2\tab\tab\cf1\b char\cf2\b0 [] \cf4 ch2\cf2  = \cf4 str2\cf2 .toLowerCase().toCharArray();\cf0\par
+\cf2\tab\tab\cf0\par
+\cf2\tab\tab SearchDuplicates \cf4 sd\cf2  = \cf1\b new\cf2\b0  SearchDuplicates();\cf0\par
+\cf2\tab\tab Boolean \cf4 res1\cf2  = \cf4 sd\cf2 .searchDup(\cf4 ch1\cf2 );\cf0\par
+\cf2\tab\tab Boolean \cf4 res2\cf2  = \cf4 sd\cf2 .searchDup(\cf4 ch2\cf2 );\cf0\par
+\cf2\tab\tab System.\cf3\b\i out\cf2\b0\i0 .println(\cf5 "Apple has all unique chars : "\cf2 +\cf4 res1\cf2 );\cf0\par
+\cf2\tab\tab System.\cf3\b\i out\cf2\b0\i0 .println(\cf5 "index has all unique chars : "\cf2 +\cf4 res2\cf2 );\cf0\par
+\cf2\tab\}\cf0\par
+\cf2\}\cf0\par
+\par
+\par
+\cf2\f2\par
+\cf0\f1\lang9\par
+\f0\fs22\par
+}
+ 
